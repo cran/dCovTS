@@ -4,13 +4,14 @@
 Distance covariance test of independence in multivariate time series
 }
 \description{
-A test of independence based on distance covariance function in multivariate time series proposed by Fokianos and Pitsillou (2016).
+A test of independence based on auto-distance covariance matrix in multivariate time series proposed by Fokianos and Pitsillou (2016).
 }
 \usage{
-mADCVtest(x, type = c("truncated", "bartlett", "daniell", "QS", "parzen"), p,
-          b = 0, parallel = FALSE)
+mADCVtest(x, type = c("truncated", "bartlett", "daniell", "QS", "parzen"), p, 
+          b = 0, parallel = FALSE, bootMethod = c("Wild Bootstrap", 
+          "Independent Bootstrap"))
 }
-
+%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
 multivariate time series.
@@ -28,13 +29,21 @@ the number of bootstrap replicates of the test statistic. It is a positive integ
 logical value. By default, parallel=FALSE. If parallel=TRUE, bootstrap computation is distributed to multiple cores, which 
 typically is the maximum number of available CPUs and is detecting directly from the function.
 }
+  \item{bootMethod}{
+character string indicating the method to use for obtaining the empirical p-value of the test. 
+Possible choices are "Wild Bootstrap" (the default) and "Independent Bootstrap"
+}
 }
 \details{
-\code{mADCVtest} performs a test of multivariate independence. In particular, the function tests whether there are no auto- and cross-correlations
-in a multivariate time series. The p-value of the test is obtained via the independent wild bootstrap (Shao, 2010; Leucht and Neumann, 2013),
+\code{\link{mADCVtest}} performs a test of multivariate independence. In particular, the function tests whether the vector
+series are independent and identically distributed (i.i.d). The p-value of the test is obtained via
+resampling scheme. Possible choices are the independent wild bootstrap (Dehling and Mikosch, 1994; Shao, 2010; Leucht and Neumann, 2013) and
+independent bootstrap,
 with \code{b} replicates. The observed statistic is
 \deqn{
 \sum_{j=1}^{n-1}(n-j)k^2(j/p)\mbox{tr}\{\hat{V}^{*}(j)\hat{V}(j)\}
+}{%
+\sum_{j=1}^{n-1} (n-j)k^2(j/p) tr {\hat{V}^{*}(j)\hat{V}(j) }
 }
 where \eqn{\hat{V}^{*}(\cdot)} denotes the complex conjugate matrix of \eqn{\hat{V}(\cdot)} obtained from \code{\link{mADCV}}, and
 \eqn{\mbox{tr}\{A\}} denotes the trace of a matrix \eqn{A}, which is the sum of the diagonal elements of \eqn{A}. \eqn{k(\cdot)} is a kernel function computed by \code{\link{kernelFun}} and \code{p} is a bandwidth or lag order whose
@@ -46,7 +55,6 @@ details of the asymptotic properties of the statistic can be found in Fokianos a
 
 \code{\link{mADCFtest}} performs the same test based on the distance correlation matrix \code{\link{mADCF}}. 
 }
-
 \value{
 An object of class \code{htest} which is a list containing:
   \item{method}{
@@ -61,24 +69,34 @@ bootstrap replicates of the test statistic (if \eqn{b=0} then \code{replicates}=
   \item{p.value}{
 p-value of the test (if \eqn{b=0} then \code{p.value}=NA).
 }
+  \item{bootMethod}{
+The method followed for computing the p-value of the test.
+}
   \item{data.name}{
 description of data (data name, kernel type, \code{type}, bandwidth, \code{p}, and the number of bootstrap replicates \code{b}).
 }
 }
-
 \references{
-Fokianos K. and M. Pitsillou (2016). On multivariate auto-distance covariance and correlation functions. Submitted for publication.
+Dehling, H. and T. Mikosch (1994). Random quadratic forms and the bootstrap for U-statistics. 
+\emph{Journal of Multivariate Analysis} \eqn{\textbf{51}}{51}, 392-413,
+\url{http://dx.doi.org/10.1006/jmva.1994.1069}
+
+Fokianos K. and M. Pitsillou (2016). Testing pairwise independence for multivariate
+time series by the auto-distance correlation matrix. Submitted for publication.
 
 Leucht, A. and M. H. Neumann (2013). Dependent wild bootstrap for degenerate U- and V- statistics.
-\emph{Journal of Multivariate Analysis} \eqn{\textbf{117}}, 257-280,
+\emph{Journal of Multivariate Analysis} \eqn{\textbf{117}}{117}, 257-280,
 \url{http://dx.doi.org/10.1016/j.jmva.2013.03.003}.
 
 Shao, X. (2010). The dependent wild bootstrap.
-\emph{Journal of the American Statistical Association} \eqn{\textbf{105}}, 218-235,
+\emph{Journal of the American Statistical Association} \eqn{\textbf{105}}{105}, 218-235,
 \url{http://dx.doi.org/10.1198/jasa.2009.tm08744}.
 }
 \author{
 Maria Pitsillou and Konstantinos Fokianos
+}
+\note{
+The computation of the test statistic is only based on the biased estimator of auto-distance covariance matrix.
 }
 
 \seealso{
@@ -94,5 +112,3 @@ p <- ceiling(c*n^lambda)
 mT=mADCVtest(x,type="bar",p=p,b=499,parallel=TRUE)
 mF=mADCVtest(x,type="bar",p=p,b=499,parallel=FALSE)}
 }
-
-\keyword{ htest }

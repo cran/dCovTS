@@ -1,10 +1,10 @@
-mADCV <- function(x,lags,output=TRUE){
+mADCV <- function(x,lags,unbiased=FALSE,output=TRUE){
  if(!is.matrix(x)) x <- as.matrix(x)
  if ((is.data.frame(x)) | (is.matrix(x))){
   if(NCOL(x)==1)stop('Only multivariate time series with dimension d>2')
   if(!is.ts(x)) x <- as.ts(x)
  }
- if (!is.numeric(x)) 
+ if (!is.numeric(x))
      stop("'x' must be numeric")
  if(!all(is.finite(x))) stop('Missing or infitive values')
  if (missing(lags))
@@ -23,7 +23,12 @@ mADCV <- function(x,lags,output=TRUE){
  cross.adcv <- matrix(NA,d,d)
  for (i in 1:d){
   for (j in 1:d){
+    if (unbiased){
+  cross.adcv[i,j] <- dcovU(X[,i],Y[,j])
+ }
+ else {
    cross.adcv[i,j] <- dcov(X[,i],Y[,j])
+ }
   }
  }
  if(output){
@@ -32,3 +37,4 @@ mADCV <- function(x,lags,output=TRUE){
  }
  mADCV <- cross.adcv
 }
+

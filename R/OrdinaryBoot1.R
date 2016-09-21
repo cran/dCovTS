@@ -1,4 +1,4 @@
-TstarBoot1 <- function(x,type,p,b,parallel=FALSE){
+OrdinaryBoot1 <- function(x,type,p,b,parallel=FALSE){
  if(is.vector(x))stop('Multivariate time series only')
  if(!all(is.finite(x))) stop('Missing or infitive values')
  if (!is.numeric(x)) stop("'x' must be numeric")
@@ -10,22 +10,14 @@ TstarBoot1 <- function(x,type,p,b,parallel=FALSE){
   if (kern==0){
    d=rep(0,b)
   } else {
-  A <- crossDist(x,j)$A
-  B <- crossDist(x,j)$B
-  Atilde <- lapply(1:q, FUN=function(i) ATilde(A[[i]]))
-  Btilde <- lapply(1:q, FUN=function(i) ATilde(B[[i]]))
-  boot = function(Atilde,Btilde,j){
-   Wtstar <- rbind(rnorm(n-j))
-   Vrm <- matrix(NA,q,q)
-    for (l in 1:q){
-     for (f in 1:q){
-       Vrm[l,f] <- sqrt((Wtstar%*%(Atilde[[l]]*Btilde[[f]])%*%t(Wtstar))/((n-j)^2))
-     }
-   }
-    res <- (n-j)*kern^2*sum(Vrm^2)
+  boot = function(x,j){
+   ind <- sample(1:n,replace=T)
+   xStar <- x[ind,]
+   Vrm <- mADCV(xStar,j,unbiased=FALSE,output=FALSE)
+   res <- (n-j)*kern^2*sum(Vrm^2)
    return(res)
   }
-  d=replicate(b,boot(Atilde,Btilde,j))
+  d=replicate(b,boot(x,j))
  }
  d
 }
@@ -35,7 +27,7 @@ if(parallel==TRUE){
   registerDoParallel(cl)
   clusterSetRNGStream(cl = cl, iseed = 9182)
   i <- seq_len(MaxLag)
-  fe_call <- as.call(c(list (as.name("foreach"), i = i,.combine="+",.export=c("kernelFun","crossDist","ATilde")) ))
+  fe_call <- as.call(c(list (as.name("foreach"), i = i,.combine="+",.export=c("kernelFun","mADCV","dcov")) ))
   fe <- eval(fe_call)
   res <- fe %dopar% test(i)
   stopCluster(cl)
@@ -45,5 +37,3 @@ else {
 }
 return(res)
 }
-
-

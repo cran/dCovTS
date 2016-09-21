@@ -64,11 +64,11 @@ A value that lies in the interval \eqn{[-1,1]}.
 Fokianos K. and M. Pitsillou (2016). Consistent testing for pairwise dependence in time series. \emph{Technometrics},
 \url{http://dx.doi.org/10.1080/00401706.2016.1156024}.
 
-Hong, Y. (1996). Consistent testing for serial correlation of unknown form. \emph{Econometrica} \eqn{\textbf{64}}, 837-864,
+Hong, Y. (1996). Consistent testing for serial correlation of unknown form. \emph{Econometrica} \eqn{\textbf{64}}{64}, 837-864,
 \url{http://dx.doi.org/10.2307/2171847}.
 
 Hong, Y. (1999). Hypothesis testing in time series via the empirical characteristic function: A generalized
-spectral density approach. \emph{Journal of the American Statistical Association} \eqn{\textbf{94}}, 1201-1220,
+spectral density approach. \emph{Journal of the American Statistical Association} \eqn{\textbf{94}}{94}, 1201-1220,
 \url{http://dx.doi.org/10.1080/01621459.1999.10473874}.
 }
 \author{

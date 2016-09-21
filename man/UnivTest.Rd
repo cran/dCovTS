@@ -9,7 +9,8 @@ A test of pairwise independence for univariate time series.
 }
 \usage{
 UnivTest(x, type = c("truncated", "bartlett", "daniell", "QS", "parzen"), 
-         testType = c("covariance", "correlation"), p, b = 0, parallel = FALSE)
+         testType = c("covariance", "correlation"), p, b = 0, parallel = FALSE, 
+         bootMethod = c("Wild Bootstrap", "Independent Bootstrap"))
 }
 
 \arguments{
@@ -33,17 +34,26 @@ the number of bootstrap replicates of the test statistic. It is a positive integ
 logical value. By default, parallel=FALSE. If parallel=TRUE, bootstrap computation is distributed to multiple cores, which 
 typically is the maximum number of available CPUs and is detecting directly from the function.
 }
+  \item{bootMethod}{
+character string indicating the method to use for obtaining the empirical p-value of the test. 
+Possible choices are "Wild Bootstrap" (the default) and "Independent Bootstrap"
+}
 }
 \details{
 \code{UnivTest} performs a test on the null hypothesis of independence in univariate time series.
-The p-value of the test is obtained via the Independent Wild Bootstrap (Shao, 2010; Leucht and Neumann, 2013),
+The p-value of the test is obtained via resampling method. Possible choices are the independent wild bootstrap (Dehling and Mikosch, 1994; 
+Shao, 2010; Leucht and Neumann, 2013) (default option) and the ordinary independent bootstrap,
 with \code{b} replicates. If \code{typeTest} = 'covariance' then, the observed statistic is
 \deqn{
 \sum_{j=1}^{n-1}{(n-j)k^2(j/p)\hat{V}^2_X(j)},
+}{%
+\sum_{j=1}^{n-1} (n-j)k^2(j/p)\hat{V}^2_X(j) ,
 }
 otherwise
 \deqn{
 \sum_{j=1}^{n-1}{(n-j)k^2(j/p)\hat{R}^2_X(j)},
+}{%
+\sum_{j=1}^{n-1} (n-j)k^2(j/p)\hat{R}^2_X(j) ,
 }
 where \eqn{k(\cdot)} is a kernel function computed by \code{\link{kernelFun}} and \code{p} is a bandwidth or lag order whose
 choice is further discussed in Fokianos and Pitsillou (2016).
@@ -66,38 +76,51 @@ bootstrap replicates of the test statistic (if \eqn{b=0} then \code{replicates}=
   \item{p.value}{
 p-value of the test (if \eqn{b=0} then \code{p.value}=NA).
 }
+  \item{bootMethod}{
+The method followed for computing the p-value of the test.
+}
   \item{data.name}{
 description of data (the data name, kernel type, \code{type}, bandwidth, \code{p}, and the number of bootstrap replicates \code{b}).
 }
 
 }
 \references{
+Dehling, H. and T. Mikosch (1994). Random quadratic forms and the bootstrap for U-statistics. 
+\emph{Journal of Multivariate Analysis} \eqn{\textbf{51}}{51}, 392-413,
+\url{http://dx.doi.org/10.1006/jmva.1994.1069}
+
 Fokianos K. and M. Pitsillou (2016). Consistent testing for pairwise dependence in time series. \emph{Technometrics},
 \url{http://dx.doi.org/10.1080/00401706.2016.1156024}.
 
 Leucht, A. and M. H. Neumann (2013). Dependent wild bootstrap for degenerate U- and V- statistics.
-\emph{Journal of Multivariate Analysis} \eqn{\textbf{117}}, 257-280,
+\emph{Journal of Multivariate Analysis} \eqn{\textbf{117}}{117}, 257-280,
 \url{http://dx.doi.org/10.1016/j.jmva.2013.03.003}.
 
 Shao, X. (2010). The dependent wild bootstrap.
-\emph{Journal of the American Statistical Association} \eqn{\textbf{105}}, 218-235,
+\emph{Journal of the American Statistical Association} \eqn{\textbf{105}}{105}, 218-235,
 \url{http://dx.doi.org/10.1198/jasa.2009.tm08744}.
 }
+
 \author{
 Maria Pitsillou and Konstantinos Fokianos
 }
+\note{
+The observed statistics of the tests are only based on the biased estimators of distance covariance and correlation functions.
+}
+
 \seealso{
 \code{\link{ADCF}} \code{\link{ADCV}}
 }
 \examples{
-x<-rnorm(500)
+x<-rnorm(100)
 n <- length(x)
 c <- 1
 lambda <- 1/5
 p <- ceiling(c*n^lambda)
 \dontrun{
-mT=UnivTest(x,type="bar",testType="covariance",p=p,b=499,parallel=TRUE)
-mF=UnivTest(x,type="bar",testType="covariance",p=p,b=499,parallel=FALSE)}
+mW=UnivTest(x,type="bar",testType="covariance",p=p,b=499,parallel=TRUE,bootMethod="Wild")
+mI=UnivTest(x,type="bar",testType="covariance",p=p,b=499,parallel=TRUE,bootMethod="Indep")
+}
 
 data <- tail(ibmSp500[,2],100)
 n2 <- length(data)

@@ -1,29 +1,27 @@
-mRbootCV <- function(n,q,MaxLag,b,parallel=FALSE){
+mOrdinaryBootCV <- function(n,q,MaxLag,b,parallel=FALSE){
  x <- replicate(q,rnorm(n))
  if (missing(MaxLag) || MaxLag < 0)
       stop("'MaxLag' must be greater than 0")
- A0 <- crossDist(x,0)$A
- Atilde0 <- lapply(1:q, FUN=function(j) ATilde(A0[[j]]))
+ mADCFfun <- function(x,lags){
+   mat <- matrix(NA,nrow=q,ncol=q)
+   X <- rbind(x[(1+lags):n,])
+   Y <- rbind(x[1:(n-lags),])
+  for (i in 1:q){
+   for (j in 1:q){
+    mat[i,j] <- dcor(X[,i],Y[,j])
+   }
+  }
+  return(mat)  
+ }
   rstar <- function(k){
-   A <- crossDist(x,k)$A
-   B <- crossDist(x,k)$B
-   Atilde <- lapply(1:q, FUN=function(j) ATilde(A[[j]]))
-   Btilde <- lapply(1:q, FUN=function(j) ATilde(B[[j]]))
    cv <- vector()
-   Rarray <- function(Atilde,Btilde,Atilde0,k){
-    Wtstar <- rbind(rnorm(n-k))
-    Wt <- rbind(rnorm(n))
-    Rm <- matrix(NA,q,q)
-     for (i in 1:q){
-     for (j in 1:q){
-       dcov <- sqrt((Wtstar%*%(Atilde[[i]]*Btilde[[j]])%*%t(Wtstar))/((n-k)^2))
-       dvarx <- sqrt(mean((Atilde0[[i]]*Atilde0[[i]]))*mean((Atilde0[[j]]*Atilde0[[j]])))
-       Rm[i,j] <- dcov/sqrt(dvarx)
-      }
-     }
+   Rstark <- function(k){
+    ind <- sample(1:n,replace=T)
+    xStar <- x[ind,]
+    Rm <- mADCFfun(x,lags=k)
     return(Rm)
    }
-   result <- replicate(b,Rarray(Atilde,Btilde,Atilde0,k))
+   result <- replicate(b,Rstark(k))
    s <- 1
    for(i in 1:q){
     for (j in 1:q){
@@ -38,12 +36,11 @@ mRbootCV <- function(n,q,MaxLag,b,parallel=FALSE){
   }
  if(parallel==TRUE){
   closeAllConnections()
-  #cl <- makeCluster(detectCores())
   cl <- makeCluster(2)
   registerDoParallel(cl)
   clusterSetRNGStream(cl = cl, iseed = 9182)
   i <- 1:MaxLag
-  fe_call <- as.call( c(list (as.name("foreach"), i = i,.combine="rbind",.export=c("crossDist","ATilde")) ))
+  fe_call <- as.call( c(list (as.name("foreach"), i = i,.combine="rbind",.export=c("mADCF","dcor")) ))
   fe <- eval(fe_call)
   Rstar <- fe %dopar% rstar(i)
   stopCluster(cl)

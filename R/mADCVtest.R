@@ -1,12 +1,14 @@
-mADCVtest <- function(x,type = c("truncated", "bartlett", "daniell", "QS",    
- "parzen"), p, b = 0, parallel = FALSE)
+mADCVtest <- function(x,type = c("truncated", "bartlett", "daniell", "QS",
+ "parzen"), p, b = 0, parallel = FALSE, bootMethod=c("Wild Bootstrap","Independent Bootstrap"))
 {
  type <- match.arg(type)
  data.name <- deparse(substitute(x))
  if (!is.matrix(x))stop('Only multivariate time series with dimension d>2')
- if (!is.numeric(x)) 
+ if (!is.numeric(x))
      stop("'x' must be numeric")
  if(!all(is.finite(x))) stop('Missing or infitive values')
+ bootMethod <- match.arg(bootMethod)
+ if (missing(bootMethod)) method="Wild Bootstrap"
  n <- as.integer(NROW(x))
  q <- as.integer(NCOL(x))
  MaxLag <- n-1
@@ -14,22 +16,27 @@ mADCVtest <- function(x,type = c("truncated", "bartlett", "daniell", "QS",
  for(k in 1:MaxLag){
   kern <- kernelFun(type,k/p)
   if (kern !=0){
-   t[k] <- (n-k)*kern^2*sum(mADCV(x,lags=k,output=FALSE)^2)
+    t[k] <- (n-k)*kern^2*sum(mADCV(x,lags=k,unbiased=FALSE,output=FALSE)^2)
   }
  }
  stat <- sum(t)
  if(!b==0){
- Tnstar <- TstarBoot1(x,type,p,b,parallel)
+  if (bootMethod=="Wild Bootstrap"){
+   Tnstar <- TstarBoot1(x,type,p,b,parallel)
+  }
+  else {
+   Tnstar <- OrdinaryBoot1(x,type,p,b,parallel)
+  }
  pvalue <- sum(Tnstar>=stat)/(b+1)
  }
  p.value <- ifelse(b == 0,NA,pvalue)
   if(b==0){
    Tnstar <- NULL
   } else Tnstar <- Tnstar
- dataname <- paste(data.name,","," kernel type: ", type,", bandwidth=",p, ", boot replicates ", b, sep = "")
+ dataname <- paste(data.name,","," kernel type: ", type,", bandwidth=",p, ", replicates ", b,  ", boot method: ", bootMethod, sep = "")
  names(stat) <- "Tn"
-   e=list(method = paste("Multivariate test of independence based on distance covariance", sep = ""), 
-        statistic = stat, p.value = p.value, replicates=Tnstar,data.name=dataname)
+   e=list(method = paste("Multivariate test of independence based on distance covariance", sep = ""),
+        statistic = stat, p.value = p.value, replicates=Tnstar,bootMethod=bootMethod,data.name=dataname)
  class(e) <- "htest"
  return(e)
 }

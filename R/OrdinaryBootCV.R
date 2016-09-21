@@ -1,22 +1,19 @@
-RbootCV <- function(n,MaxLag,b,parallel=FALSE){
+OrdinaryBootCV <- function(n,MaxLag,b,parallel=FALSE){
  x <- rnorm(n)
  if (missing(MaxLag) || MaxLag < 0)
       stop("'MaxLag' must be greater than 1")
- A0 <- crossDist(x,lags=0)$A[[1]]
- Atilde0 <- ATilde(A0)
+ dcorFun <- function(x,k){
+     xA <- x[1:(n-k)]
+     xB <- x[(1+k):n]
+     return(dcor(xA,xB))
+ }
  rstar <- function(k){
-  cross <- crossDist(x,lags=k)
-  A <- cross$A[[1]]
-  B <- cross$B[[1]]
-  Atilde <- ATilde(A)
-  Btilde <- ATilde(B)
-  Rstark = function(Atilde,Btilde,k){
-   Wtstar <- rbind(rnorm(n-k))
-   dcov <- sqrt((Wtstar%*%(Atilde*Btilde)%*%t(Wtstar))/((n-k)^2))
-   dvarx <- sqrt(mean((Atilde0*Atilde0))*mean((Atilde0*Atilde0)))
-   return(dcov/sqrt(dvarx))
+  Rstark <- function(k){
+   xStar <- sample(x,replace=TRUE)
+   dcor <- dcorFun(xStar,k)
+   return(dcor)
   }
- return(replicate(b,Rstark(Atilde,Btilde,k)))
+ return(replicate(b,Rstark(k)))
 }
 if(parallel==TRUE){
   closeAllConnections()
@@ -25,7 +22,7 @@ if(parallel==TRUE){
   registerDoParallel(cl)
   clusterSetRNGStream(cl = cl, iseed = 9182)
   i <- 1:MaxLag
-  fe_call <- as.call( c(list (as.name("foreach"), i = i,.export=c("crossDist","ATilde")) ))
+  fe_call <- as.call( c(list (as.name("foreach"), i = i,.export=c("dcor","ADCF")) ))
   fe <- eval(fe_call)
   Rstar <- fe %dopar% rstar(i)
   stopCluster(cl)
@@ -45,7 +42,4 @@ else {
 }
 return(res)
 }
-
-
-
 

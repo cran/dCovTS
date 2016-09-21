@@ -1,7 +1,7 @@
-TstarBoot2 <- function(x,type,p,b,parallel=FALSE){   
+TstarBoot2 <- function(x,type,p,b,parallel=FALSE){
  if(is.vector(x))stop('Multivariate time series only')
  if(!all(is.finite(x))) stop('Missing or infitive values')
- if (!is.numeric(x)) stop("'x' must be numeric") 
+ if (!is.numeric(x)) stop("'x' must be numeric")
  n <- as.integer(NROW(x))
  q <- as.integer(NCOL(x))
  A0 <- crossDist(x,0)$A
@@ -21,12 +21,12 @@ TstarBoot2 <- function(x,type,p,b,parallel=FALSE){
    Rrm <- matrix(NA,q,q)
     for (l in 1:q){
      for (f in 1:q){
-       dcov <- sqrt((Wtstar%*%(Atilde[[l]]*Btilde[[f]])%*%t(Wtstar))/((n-j)^2))
-       dvarx <- sqrt(mean((Atilde0[[l]]*Atilde0[[l]]))*mean((Atilde0[[f]]*Atilde0[[f]])))
-       Rrm[l,f] <- dcov/sqrt(dvarx)
+        dcov <- sqrt((Wtstar%*%(Atilde[[l]]*Btilde[[f]])%*%t(Wtstar))/((n-j)^2))
+        dvarx <- sqrt(mean((Atilde0[[l]]*Atilde0[[l]]))*mean((Atilde0[[f]]*Atilde0[[f]])))
+        Rrm[l,f] <- dcov/sqrt(dvarx)
      }
    }
-   return((n-j)*kern^2*sum(Rrm^2))
+    return((n-j)*kern^2*sum(Rrm^2))
   }
   d <- replicate(b,boot(Atilde0,Atilde,Btilde,j))
  }

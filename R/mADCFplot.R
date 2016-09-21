@@ -1,10 +1,18 @@
-mADCFplot <- function(x,MaxLag=15,ylim=NULL,b=499){
+mADCFplot <- function(x,MaxLag=15,ylim=NULL,b=499,bootMethod=c("Wild Bootstrap","Independent Bootstrap")){
 if(b<=0) stop("No plots are given for b<=0")
 if (MaxLag==0) stop("MaxLag must be greater than 0")
+    bootMethod <- match.arg(bootMethod)
+    if (missing(bootMethod))
+        bootMethod = "Wild Bootstrap"
 q <- as.integer(NCOL(x))
 n <- as.integer(NROW(x))
-R <- array(unlist(lapply(0:MaxLag, FUN=function(i) mADCF(x,i,output=FALSE))),dim=c(q,q,MaxLag+1))
-mcv <- max(mRbootCV(n,q,MaxLag,b=b,parallel=TRUE))
+R <- array(unlist(lapply(0:MaxLag, FUN=function(i) mADCF(x,i,unbiased=FALSE,output=FALSE))),dim=c(q,q,MaxLag+1))
+if (bootMethod == "Wild Bootstrap"){
+ mcv <- max(mRbootCV(n,q,MaxLag,b=b,parallel=TRUE))
+}
+else {
+ mcv <- max(mOrdinaryBootCV(n,q,MaxLag,b=b,parallel=TRUE))
+}
 Lag <- 0:MaxLag
 Rplot <- function(R,cv,main){
  r1 <- max(max(cv),1)
@@ -68,7 +76,7 @@ s1 <- seq(1,d,by=1)
   }
 }
 }
-result <- list(matrices=R,critical.value=mcv)
+result <- list(matrices=R,bootMethod=bootMethod,critical.value=mcv)
 return(result)
 }
 
