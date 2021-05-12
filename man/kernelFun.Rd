@@ -13,12 +13,12 @@ kernelFun(type, z)
 }
 
 \arguments{
-  \item{type}{
-character string which indicates the name of the smoothing kernel. 
+\item{type}{
+A character string which indicates the name of the smoothing kernel.
 \code{kernelFun} can be: 'truncated', 'bartlett', 'daniell', 'QS', 'parzen'. No default is given.
 }
-  \item{z}{
-real number.
+\item{z}{
+A real number.
 }
 }
 \details{
@@ -26,7 +26,7 @@ real number.
 
 The exact definition of each of the above functions are given below: \cr
 \itemize{
-\item Truncated 
+\item Truncated
 \deqn{ k(z) = \left\{
                      \begin{array}{ll}
                        1, & |z| \leq 1, \\[1ex]
@@ -53,31 +53,37 @@ The exact definition of each of the above functions are given below: \cr
                           \end{array}
                         \right. }
 }
-All these kernel functions are mainly used to smooth the generalized spectral density function, firstly introduced by Hong (1999).
-Assumptions and theoretical properties of these functions can be found in Hong (1996;1999) and Fokianos and Pitsillou (2016).
+All these kernel functions are mainly used to smooth the generalized spectral density function, firstly 
+introduced by Hong (1999). Assumptions and theoretical properties of these functions can be found in 
+Hong (1996;1999) and Fokianos and Pitsillou (2017).
 }
 
 \value{
-A value that lies in the interval \eqn{[-1,1]}.
+A value that lies in the interval \eqn{[-1, 1]}.
 }
 \references{
-Fokianos K. and M. Pitsillou (2016). Consistent testing for pairwise dependence in time series. \emph{Technometrics},
-\url{http://dx.doi.org/10.1080/00401706.2016.1156024}.
+Edelmann, D, K. Fokianos. and M. Pitsillou. (2019). An Updated Literature Review of Distance Correlation 
+and Its Applications to Time Series. \emph{International Statistical Review}, 87, 237-262.
 
-Hong, Y. (1996). Consistent testing for serial correlation of unknown form. \emph{Econometrica} \eqn{\textbf{64}}{64}, 837-864,
-\url{http://dx.doi.org/10.2307/2171847}.
+Fokianos K. and M. Pitsillou (2017). Consistent testing for pairwise dependence in time series.
+\emph{Technometrics}, 159, 262-3270.
 
-Hong, Y. (1999). Hypothesis testing in time series via the empirical characteristic function: A generalized
-spectral density approach. \emph{Journal of the American Statistical Association} \eqn{\textbf{94}}{94}, 1201-1220,
-\url{http://dx.doi.org/10.1080/01621459.1999.10473874}.
+Pitsillou M. and Fokianos K. (2016). dCovTS: Distance Covariance/Correlation for Time Series. 
+R Journal, 8, 324-340.
+
+Hong, Y. (1996). Consistent testing for serial correlation of unknown form.
+\emph{Econometrica}, 64, 837-864.
+
+Hong, Y. (1999). Hypothesis testing in time series via the empirical characteristic function: A generalized 
+spectral density approach. \emph{Journal of the American Statistical Association}, 94, 1201-1220.
 }
 \author{
-Maria Pitsillou and Konstantinos Fokianos
+Maria Pitsillou and Konstantinos Fokianos.
 }
 \examples{
-k1 <- kernelFun("bartlett",z=1/3)
-k2 <- kernelFun("bar",z=1/5)
-k3 <- kernelFun("dan",z=0.5)
+k1 <- kernelFun( "bartlett", z = 1/3 )
+k2 <- kernelFun( "bar", z = 1/5 )
+k3 <- kernelFun( "dan", z = 0.5 )
 }
 
 \keyword{ ts }
