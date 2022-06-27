@@ -31,9 +31,8 @@ random vectors. Zhou (2012) extended this measure to univariate time series fram
 For a univariate time series, \code{\link{ADCF}} computes the auto-distance correlation function, \eqn{R_X(j)},
 between \eqn{\{X_t\}} and \eqn{\{X_{t+j}\}}, whereas \code{\link{ADCV}} computes the auto-distance covariance function
 between them, denoted by \eqn{V_X(j)}. Formal definition of \eqn{R_X(\cdot)} and \eqn{V_X(\cdot)} can be found in Zhou (2012)
-and Fokianos and Pitsillou (2017). The empirical auto-distance correlation function, \eqn{\hat{R}_X(j)}, is computed as
-the positive square root of \deqn{ \hat{R}_X^2(j)=\frac{\hat{V}_X^2(j)}{\hat{V}_X^2(0)}, \quad j=0, \pm 1, \pm 2, \dots}{%
-\hat{R}_X^2(j) = \hat{V}_X^2(j) / \hat{V}_X^2(0),    j=0, \pm 1, \pm 2, \dots}
+and Fokianos and Pitsillou (2017). The empirical auto-distance correlation function, \eqn{\hat{R}_X(j)}, is computed as the
+positive square root of \deqn{ \hat{R}_X^2(j)=\frac{\hat{V}_X^2(j)}{\hat{V}_X^2(0)}, \quad j=0, \pm 1, \pm 2, \dots}%{ \hat{R}_X^2(j) = \hat{V}_X^2(j) / \hat{V}_X^2(0),    j=0, \pm 1, \pm 2, \dots}
 
 for \eqn{\hat{V}_X^2(0) \neq 0} and zero otherwise, where \eqn{\hat{V}_X(\cdot)} is a function of the double
 centered Euclidean distance matrices of the sample \eqn{X_t} and its lagged sample \eqn{X_{t+j}} (see \code{\link{ADCV}}
@@ -61,7 +60,7 @@ Huo, X. and G. J. Szekely. (2016). Fast Computing for Distance Covariance.
 \emph{Technometrics}, 58, 435-447.
 
 Pitsillou M. and Fokianos K. (2016). dCovTS: Distance Covariance/Correlation for Time Series.
-R Journal, 8, 324-340.
+\emph{R Journal}, 8, 324-340.
 
 Szekely, G. J. and M. L. Rizzo (2014). Partial distance correlation with methods for dissimilarities.
 \emph{The Annals of Statistics}, 42, 2382-2412.
@@ -71,8 +70,8 @@ of distances. \emph{The Annals of Statistics}, 35, 2769-2794.
 
 Zhou, Z. (2012). Measuring nonlinear dependence in time series, a distance correlation approach.
 \emph{Journal of Time Series Analysis} 33, 438-457.
-
 }
+
 \author{
 Maria Pitsillou, Michail Tsagris and Konstantinos Fokianos.
 }

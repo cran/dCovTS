@@ -14,11 +14,11 @@ mOrdinaryBootCV <- function(n, p, MaxLag, alpha, b, parallel = FALSE) {
   rstar <- function(k){
     cv <- vector()
     Rstark <- function(k) {
-      ind <- sample(1:n, replace = TRUE)
+      ind <- Rfast2::Sample.int(n, n, replace = TRUE)
       xStar <- x[ind, ]
       mADCFfun(xStar, lags = k)
     }
-    result <- replicate(b, Rstark(k) )
+    result <- replicate( b, Rstark(k) )
 
     ela <- expand.grid(1:p, 1:p)
     for ( i in 1:dim(ela)[1] ) {

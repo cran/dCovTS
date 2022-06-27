@@ -1,8 +1,8 @@
 Package: dCovTS
 Type: Package
 Title: Distance Covariance and Correlation for Time Series Analysis
-Version: 1.2
-Date: 2021-05-12
+Version: 1.3
+Date: 2022-06-27
 Authors@R: c(
            person( "Michail", "Tsagris", role = c("aut", "cre"), email = "mtsagris@uoc.gr" ),
            person( "Maria", "Pitsillou", role = c("aut", "cph"), email = "pitsillou.maria@ucy.ac.cy" ),
@@ -21,6 +21,6 @@ Imports: dcov, doParallel, foreach, parallel, Rfast, Rfast2
 License: GPL (>= 2)
 LazyData: true
 NeedsCompilation: no
-Packaged: 2021-05-12 09:01:52 UTC; Michail
+Packaged: 2022-06-27 19:19:17 UTC; Michail
 Repository: CRAN
-Date/Publication: 2021-05-12 23:12:12 UTC
+Date/Publication: 2022-06-27 22:20:07 UTC

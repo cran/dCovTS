@@ -8,7 +8,7 @@ TstarBoot2 <- function(x, type, p, b, parallel = FALSE) {
   A0 <- crossDist(x, 0)$A
   Atilde0 <- list()
   for ( i in 1:qa )  Atilde0[[ i ]] <- ATilde(A0[[ i ]] )
-  
+
   boot <- function(Atilde0, Atilde, Btilde, kern, j, b) {
     ela <- expand.grid(1:qa, 1:qa)
     dvarx <- numeric( dim(ela)[1] )
@@ -30,7 +30,7 @@ TstarBoot2 <- function(x, type, p, b, parallel = FALSE) {
       Rrm[, i] <- dcova/dvarx[i]
     }
     a1 <- kern^2 * Rfast::rowsums(Rrm) / (n - j)
-    Rrm <- matrix(nrow = b2, ncol = dim(ela)[1])   
+    Rrm <- matrix(nrow = b2, ncol = dim(ela)[1])
     Wtstar <- Rfast::matrnorm(b2, n - j) ## matrix of Z variables with b/2 rows and n - k columns
     for ( i in 1:dim(ela)[1] ) {
       com <- Atilde[[ ela[i, 1] ]] * Btilde[[ ela[i, 2] ]]

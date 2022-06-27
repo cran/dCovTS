@@ -13,7 +13,7 @@ OrdinaryBoot2 <- function(x, type, p, b, parallel = FALSE) {
      d <- numeric(b)
     } else {
       boot <- function(x, j) {
-        ind <- sample(1:n, replace = TRUE)
+        ind <- Rfast2::Sample.int(n, n, replace = TRUE)
         xStar <- x[ind, ]
         Rrm <- mADCF(xStar, j, unbiased = FALSE, output = FALSE)
         return( sum(Rrm^2) )
@@ -30,7 +30,7 @@ OrdinaryBoot2 <- function(x, type, p, b, parallel = FALSE) {
     clusterSetRNGStream(cl = cl, iseed = 9182)
     i <- seq_len(MaxLag)
     fe_call <- as.call( c(list (as.name("foreach"), i = i, .combine = "+",
-                        .export = c("kernelFun", "mADCF"), .packages = "dcov" ) ) )
+                        .export = c("kernelFun", "mADCF", "Sample.int"), .packages = c("dcov", "Rfast2" ) ) ) )
     fe <- eval(fe_call)
     res <- fe %dopar% test(i)
     stopCluster(cl)

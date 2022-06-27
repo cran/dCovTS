@@ -29,6 +29,7 @@ RbootCV <- function(n, MaxLag, alpha = 0.05, b, parallel = FALSE) {
   }
 
   if ( parallel ) {
+    requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
     closeAllConnections()
     cl <- makeCluster(detectCores())
     registerDoParallel(cl)

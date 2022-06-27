@@ -12,13 +12,13 @@ mRbootCV <- function(n, qa, MaxLag, alpha, b, parallel = FALSE) {
     Atilde <- Btilde <- list()
     for (i in 1:qa)  {
       Atilde[[ i ]] <- ATilde( A[[ i ]] )
-	Btilde[[ i ]] <- ATilde( B[[ i ]] )
+    	Btilde[[ i ]] <- ATilde( B[[ i ]] )
     }
 
     ela <- expand.grid(1:qa, 1:qa)
     dvarx <- numeric( dim(ela)[1] )
     for ( i in 1:dim(ela)[1] ) {
-      dvarx[i] <- mean( Atilde0[[ ela[i, 1] ]] ^2 ) * mean( Atilde0[[ ela[i, 2] ]]^2 )
+      dvarx[i] <- mean( Atilde0[[ ela[i, 1] ]]^2 ) * mean( Atilde0[[ ela[i, 2] ]]^2 )
     }
     dvarx <- dvarx^0.25
 
@@ -26,7 +26,7 @@ mRbootCV <- function(n, qa, MaxLag, alpha, b, parallel = FALSE) {
       ela <- expand.grid(1:qa, 1:qa)
       Rm <- matrix(nrow = qa, ncol = qa)
       Wtstar <- Rfast::Rnorm(n - k)
-      down <- ( n - k) * dvarx
+      down <- (n - k) * dvarx
       for ( i in 1:dim(ela)[1] ) {
         com <- Atilde[[ ela[i, 1] ]] * Btilde[[ ela[i, 2] ]]
         dcova <- sum( Wtstar %*% com * Wtstar )
@@ -107,7 +107,7 @@ mRbootCV <- function(n, qa, MaxLag, alpha, b, parallel = FALSE) {
 #      for (j in 1:q){
 #        dcov <- sqrt((Wtstar%*%(Atilde[[i]]*Btilde[[j]])%*%t(Wtstar))/((n-k)^2))
 #        dvarx <- sqrt(mean((Atilde0[[i]]*Atilde0[[i]]))*mean((Atilde0[[j]]*Atilde0[[j]])))
-#        Rm[i,j] <- dcov/sqrt(dvarx)
+#        Rm[i,j] <- dcov/sqrt(dvarx)  
 #       }
 #      }
 #     return(Rm)

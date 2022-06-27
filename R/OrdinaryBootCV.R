@@ -3,19 +3,19 @@ OrdinaryBootCV <- function(n, MaxLag, alpha = 0.05, b, parallel = FALSE) {
    if (n < 500) {
      x <- rnorm(n)
    } else x <- Rfast::Rnorm(n)
-   xStar <- replicate( b, sample(x, n, replace = TRUE) )
+   xStar <- replicate( b, Rfast2::Sample(x, n, replace = TRUE) )
    Rstar <- matrix(nrow = b, ncol = MaxLag )
 
    if ( parallel ) {
-     oop <- options(warn = -1)
-     on.exit( options(oop) )
+    oop <- options(warn = -1)
+    on.exit( options(oop) )
      requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
      closeAllConnections()
      cl <- parallel::makePSOCKcluster( parallel::detectCores() )
      doParallel::registerDoParallel(cl)
      rstarb <- numeric(b)
      k <- 1:MaxLag
-     Rstar <- foreach(k = k, .combine = cbind, .packages = "dcov") %dopar% {
+     Rstar <- foreach(k = k, .combine = cbind, .packages = "dcov" ) %dopar% {
        xA <- xStar[1:(n - k), ]
        xB <- xStar[(1 + k):n, ]
        for (i in 1:b)  rstarb[i] <- dcov::dcor2d(xA[, i], xB[, i])

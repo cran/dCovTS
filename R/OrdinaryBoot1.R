@@ -7,7 +7,7 @@ OrdinaryBoot1 <- function(x, type, p, b, parallel = FALSE) {
   MaxLag <- n - 2
 
   boot <- function(x, j) {
-    ind <- sample(1:n, replace = TRUE )
+    ind <- Rfast2::Sample.int(n, n, replace = TRUE )
     xStar <- x[ind, ]
     Vrm <- mADCV(xStar, j, unbiased = FALSE, output = FALSE)
     sum(Vrm^2)
@@ -31,7 +31,7 @@ OrdinaryBoot1 <- function(x, type, p, b, parallel = FALSE) {
     clusterSetRNGStream(cl = cl, iseed = 9182)
     i <- 1:MaxLag
     fe_call <- as.call( c( list( as.name("foreach"), i = i, .combine = "+",
-               .export = c("kernelFun", "mADCV", "boot"), .packages = "dcov" ) ) )
+               .export = c("kernelFun", "mADCV", "boot", "Sample.int"), .packages = c("Rfast2", "dcov") ) ) )
     fe <- eval(fe_call)
     res <- fe %dopar% test(i)
     stopCluster(cl)

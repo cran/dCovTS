@@ -28,7 +28,7 @@ SubsCV <- function(x, MaxLag, alpha, parallel = FALSE) {
     se <- numeric( length(bseq) )
     for ( l in 1:length(bseq) ) {
       bk <- bseq[l] + rr
-      Tneighb <- sapply( 1:length(bk), function(m) test(x, j = lags, b = bk[m]) )
+      Tneighb <- sapply( 1:length(bk), function(m)  test(x, j = lags, b = bk[m]) )
       se[l] <- sqrt( sum( abs( Tneighb - mean(Tneighb) )^2 ) / (length(bk) - 1) )
     }
     bseq[ order(se)[1] ]
@@ -39,18 +39,17 @@ SubsCV <- function(x, MaxLag, alpha, parallel = FALSE) {
     on.exit( options(oop) )
     requireNamespace("doParallel", quietly = TRUE, warn.conflicts = FALSE)
     closeAllConnections()
-    cl <- makeCluster(detectCores())
+    cl <- makeCluster( detectCores() )
     registerDoParallel(cl)
     clusterSetRNGStream(cl = cl, iseed = 9182)
     i <- 1:MaxLag
-    fe_call <- as.call( c( list( as.name("foreach"), i = i, .combine = "c", .packages = c("dcov") ) ) )
+    fe_call <- as.call( c( list( as.name("foreach"), i = i, .combine = "c",
+                                 .export = c("optimal.block", "test"), .packages = c("dcov") ) ) )
     fe <- eval(fe_call)
     cv <- fe %dopar% test( x, i, b = optimal.block(x, lags = i, MaxLag) )
     stopCluster(cl)
 
-  } else {
-    cv <- sapply( 1:MaxLag, function(i) test( x, i, b = optimal.block(x, lags = i, MaxLag) ) )
-  }
+  } else  cv <- sapply( 1:MaxLag, function(i) test( x, i, b = optimal.block(x, lags = i, MaxLag) ) )
 
   cv
 }

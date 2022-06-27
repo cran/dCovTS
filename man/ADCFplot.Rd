@@ -61,7 +61,7 @@ A plot of the estimated \code{\link{ADCF}} values. It also returns a list includ
 The sample auto-distance correlation function for all lags specified by \code{MaxLag}.
 }
 \item{bootMethod}{
-The method followed for computing the \eqn{(1-alpha)}\% confidence intervals of the plot.
+The method followed for computing the \eqn{(1-\alpha)}\% confidence intervals of the plot.
 }
 \item{critical.value}{
 The critical value shown in the plot.
@@ -81,11 +81,11 @@ Leucht, A. and M. H. Neumann (2013). Dependent wild bootstrap for degenerate U- 
 \emph{Journal of Multivariate Analysis}, 117, 257-280.
 
 Pitsillou M. and Fokianos K. (2016). dCovTS: Distance Covariance/Correlation for Time Series.
-R Journal, 8, 324-340.
+\emph{R Journal}, 8, 324-340.
 
 Politis, N. P., J. P. Romano and M. Wolf (1999). \emph{Subsampling}. New York: Springer.
 
-Shao, X. (2010). The dependent wild bootstrap. \emph{Journal of the American Statistical Association}, 105 218-235.
+Shao, X. (2010). The dependent wild bootstrap. \emph{Journal of the American Statistical Association}, 105, 218-235.
 
 Zhou, Z. (2012). Measuring nonlinear dependence in time series, a distance correlation approach.
 \emph{Journal of Time Series Analysis}, 33, 438-457.
@@ -94,18 +94,24 @@ Zhou, Z. (2012). Measuring nonlinear dependence in time series, a distance corre
 Maria Pitsillou, Michail Tsagris and Konstantinos Fokianos.
 }
 \note{
-When the critical values are obtained via the Subsampling methodology, the function returns a plot that
-starts from lag 1.
+When the critical values are obtained via the Subsampling methodology, the
+function returns a plot that starts from lag 1.
 
 The function plots only the biased estimator of ADCF.
+
+%Due to restrictions in the use of parallel on CRAN, we removed the example.
+%An example of how this function works is
+%"x <- rnorm(200)" ;
+%"ADCFplot(x, bootMethod = "Subs")".
 }
 
 \seealso{
 \code{\link{ADCF}}, \code{\link{ADCV}}, \code{\link{mADCFplot}}
 }
 \examples{
-\dontrun{
-ADCFplot(rnorm(100), bootMethod = "Subs")
+\donttest{
+### x <- rnorm(200)
+### ADCFplot(x, bootMethod = "Subs")
 }
 }
 \keyword{ plot }

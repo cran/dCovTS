@@ -55,8 +55,7 @@ TstarBoot <- function(x, type, testType, p, b, parallel = FALSE) {
     doParallel::registerDoParallel(cl)
 
     k <- 1:MaxLag
-    d <- foreach(k = k, .combine = cbind,
-         .export = c("kernelFun", "crossDist", "ATilde", "bootCov", "bootCor"), .packages = "Rfast") %dopar% {
+    d <- foreach(k = k, .combine = cbind, .export = c("kernelFun", "crossDist", "ATilde", "bootCov", "bootCor"), .packages = "Rfast") %dopar% {
       kern <- kernelFun(type, k/p)
       if ( abs(kern) < 1e-16 ) {
         return( numeric(b) )

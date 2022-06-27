@@ -58,7 +58,7 @@ mADCFplot <- function(x, MaxLag = 15, alpha = 0.05, b = 499,
     } else {
       for ( sc in 1:4 ) {
         #par(ask=TRUE)
-        if ( counter == 1) {
+        if ( counter == 1 ) {
           par( mfrow = c(4, 4) )
           plot.fun(s1, s1)
         } else if ( counter == 2 ) {

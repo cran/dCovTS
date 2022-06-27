@@ -7,9 +7,8 @@ importFrom("graphics", par, plot, plot.new, points, segments)
 importFrom("Rfast", vecdist, rowmeans, colmeans, rowsums,
            matrnorm, Rnorm, eachrow, colMaxs)
 
-importFrom("Rfast2", colQuantile)
+importFrom("Rfast2", colQuantile, Sample.int, Sample)
 importFrom("stats", as.ts, is.ts, p.adjust, quantile, rnorm)
-
 
 import("doParallel")
 import("parallel")

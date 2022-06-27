@@ -20,7 +20,7 @@ OrdinaryBoot <- function(x, type, testType, p, b, parallel = FALSE) {
     doParallel::registerDoParallel(cl)
 
     if ( testType == "covariance" ) {
-      x_star <- replicate( b, sample(x, n, replace = TRUE) )
+      x_star <- replicate( b, Rfast2::Sample(x, n, replace = TRUE) )
       k <- 1:MaxLag
       d <- foreach(k = k, .combine = cbind, .packages = "dcov", .export = "kernelFun") %dopar% {
         kern <- kernelFun(type, k/p)
@@ -36,7 +36,7 @@ OrdinaryBoot <- function(x, type, testType, p, b, parallel = FALSE) {
       } ## end foreach
 
     } else {
-      x_star <- replicate( b, sample(x, n, replace = TRUE) )
+      x_star <- replicate( b, Rfast2::Sample(x, n, replace = TRUE) )
       k <- 1:MaxLag
       d <- foreach(k = k, .combine = cbind, .packages = "dcov", .export = "kernelFun") %dopar% {
         kern <- kernelFun(type, k/p)
@@ -57,7 +57,7 @@ OrdinaryBoot <- function(x, type, testType, p, b, parallel = FALSE) {
 
   } else {
     if ( testType == "covariance" ) {
-      x_star <- replicate( b, sample(x, n, replace = TRUE) )
+      x_star <- replicate( b, Rfast2::Sample(x, n, replace = TRUE) )
       d <- matrix(nrow = b, ncol = MaxLag)
       for (k in 1:MaxLag) {
         kern <- kernelFun(type, k/p)
@@ -73,7 +73,7 @@ OrdinaryBoot <- function(x, type, testType, p, b, parallel = FALSE) {
       } ## end for (k in 1:MaxLag)
 
     } else {
-      x_star <- replicate( b, sample(x, n, replace = TRUE) )
+      x_star <- replicate( b, Rfast2::Sample(x, n, replace = TRUE) )
       d <- matrix(nrow = b, ncol = MaxLag)
       for (k in 1:MaxLag) {
         kern <- kernelFun(type, k/p)
