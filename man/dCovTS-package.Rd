@@ -16,8 +16,8 @@ are also implemented. Some data sets are also included.
 \tabular{ll}{
 Package: \tab dCovTS\cr
 Type: \tab Package\cr
-Version: \tab 1.3\cr
-Date: \tab 2022-06-27\cr
+Version: \tab 1.4\cr
+Date: \tab 2023-09-28\cr
 License: \tab GPL(>=2)\cr
 }
 }
